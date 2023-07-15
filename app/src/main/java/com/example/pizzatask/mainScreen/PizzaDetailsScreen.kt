@@ -32,13 +32,18 @@ fun PizzaDetailsScreen(
     viewModel: PizzaDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-
-    PizzaDetailsContent(state = state , onChangedPizzaSize = viewModel::onChangePizzaSize)
+    PizzaDetailsContent(
+        state = state ,
+        onChangedPizzaSize = viewModel::onChangePizzaSize,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PizzaDetailsContent(state: PizzaDetailsUiState, onChangedPizzaSize:(PizzaSizes)->Unit) {
+fun PizzaDetailsContent(
+    state: PizzaDetailsUiState,
+    onChangedPizzaSize:(PizzaSizes)->Unit,
+) {
     Scaffold(
         topBar = {
             PizzaDetailsAppBar()
@@ -69,7 +74,8 @@ fun PizzaDetailsContent(state: PizzaDetailsUiState, onChangedPizzaSize:(PizzaSiz
                     start.linkTo(plate.start)
                     end.linkTo(plate.end)
                 },
-                selectedSize = state.selectedPizza.size
+                selectedSize = state.selectedPizza.size,
+                breadsUiState = state.breadsUiState
             )
 
             Text(
@@ -94,10 +100,8 @@ fun PizzaDetailsContent(state: PizzaDetailsUiState, onChangedPizzaSize:(PizzaSiz
                 selectedPizzaSize = state.selectedPizza,
                 onSelected = onChangedPizzaSize
             )
-
         }
     }
-
 }
 
 @Preview

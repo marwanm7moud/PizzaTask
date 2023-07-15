@@ -15,25 +15,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.pizzatask.R
+import com.example.pizzatask.mainScreen.BreadUiState
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PizzaDetailsBreadPager(modifier: Modifier , selectedSize: Dp) {
+fun PizzaDetailsBreadPager(modifier: Modifier, selectedSize: Dp, breadsUiState: List<BreadUiState>) {
     val animatedSize by animateDpAsState(targetValue = selectedSize)
-    val breads = listOf(
-        R.drawable.bread_1,
-        R.drawable.bread_2,
-        R.drawable.bread_3,
-        R.drawable.bread_4,
-        R.drawable.bread_5,
-    )
     val pagerState = rememberPagerState(
         initialPage = 0,
         initialPageOffsetFraction = 0f
     ) {
-        breads.size
+        breadsUiState.size
     }
     HorizontalPager(
         state = pagerState ,
@@ -42,7 +35,7 @@ fun PizzaDetailsBreadPager(modifier: Modifier , selectedSize: Dp) {
     ) { index ->
         Box(modifier = Modifier.fillMaxWidth() , contentAlignment = Alignment.Center) {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data(breads[index]).build(),
+                model = ImageRequest.Builder(LocalContext.current).data(breadsUiState[index].breadImage).build(),
                 modifier = Modifier.size(animatedSize),
                 contentDescription = "Bread"
             )
