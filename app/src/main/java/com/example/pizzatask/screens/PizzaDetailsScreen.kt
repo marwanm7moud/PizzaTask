@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -38,7 +39,7 @@ fun PizzaDetailsScreen() {
         }
     ) { paddingValues ->
         ConstraintLayout(modifier = Modifier.padding(PaddingValues(top = paddingValues.calculateTopPadding() + 16.dp))) {
-            val (image) = createRefs()
+            val (image, breadPager) = createRefs()
 
             Box(
                 modifier = Modifier
@@ -55,7 +56,14 @@ fun PizzaDetailsScreen() {
                 )
             }
 
-            
+            PizzaDetailsBreadPager(
+                modifier = Modifier.constrainAs(breadPager) {
+                    top.linkTo(image.top)
+                    bottom.linkTo(image.bottom)
+                    start.linkTo(image.start)
+                    end.linkTo(image.end)
+                }
+            )
 
         }
     }
