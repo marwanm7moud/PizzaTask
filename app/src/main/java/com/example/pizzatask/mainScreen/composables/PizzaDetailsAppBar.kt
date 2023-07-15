@@ -1,4 +1,4 @@
-package com.example.pizzatask.screens
+package com.example.pizzatask.mainScreen.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
