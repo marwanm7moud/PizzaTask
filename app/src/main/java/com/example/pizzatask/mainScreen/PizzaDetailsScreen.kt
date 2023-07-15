@@ -1,6 +1,8 @@
 package com.example.pizzatask.mainScreen
 
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pizzatask.R
 import com.example.pizzatask.mainScreen.composables.PizzaDetailsAppBar
 import com.example.pizzatask.mainScreen.composables.PizzaDetailsBreadPager
+import com.example.pizzatask.mainScreen.composables.PizzaDetailsIngredientChips
 import com.example.pizzatask.mainScreen.composables.PizzaDetailsPizzaSizesChips
 import com.example.pizzatask.ui.theme.PizzaTaskTheme
 
@@ -33,8 +37,11 @@ fun PizzaDetailsScreen(
 ) {
     val state by viewModel.state.collectAsState()
     PizzaDetailsContent(
-        state = state ,
+        state = state,
+        currentBreadUiState = state.selectedBread,
         onChangedPizzaSize = viewModel::onChangePizzaSize,
+        onChangedIngredient = viewModel::onChangeIngredientChip,
+        onChangeCurrentBread = viewModel::onChangeCurrentBread
     )
 }
 
@@ -42,15 +49,26 @@ fun PizzaDetailsScreen(
 @Composable
 fun PizzaDetailsContent(
     state: PizzaDetailsUiState,
-    onChangedPizzaSize:(PizzaSizes)->Unit,
+    onChangedPizzaSize: (PizzaSizes) -> Unit,
+    onChangedIngredient: (Ingredient) -> Unit,
+    onChangeCurrentBread: (BreadUiState) -> Unit,
+    currentBreadUiState: BreadUiState,
 ) {
     Scaffold(
         topBar = {
             PizzaDetailsAppBar()
         }
     ) { paddingValues ->
-        ConstraintLayout(modifier = Modifier.padding(PaddingValues(top = paddingValues.calculateTopPadding() + 16.dp))) {
-            val (plate, breadPager, price, pizzaSizes) = createRefs()
+        ConstraintLayout(
+            modifier = Modifier.padding(
+                PaddingValues(
+                    top = paddingValues.calculateTopPadding() + 16.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                )
+            )
+        ) {
+            val (plate, breadPager, price, pizzaSizes, text , ingredients) = createRefs()
 
             Box(
                 modifier = Modifier
@@ -75,7 +93,9 @@ fun PizzaDetailsContent(
                     end.linkTo(plate.end)
                 },
                 selectedSize = state.selectedPizza.size,
-                breadsUiState = state.breadsUiState
+                breadsUiState = state.breadsUiState,
+                onChangeCurrentBread = onChangeCurrentBread,
+                selectedBread = currentBreadUiState
             )
 
             Text(
@@ -88,6 +108,8 @@ fun PizzaDetailsContent(
                         top.linkTo(plate.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
+                    }.clickable{
+                        Log.e("TAG", "onChangeIngredientChip: ${state.breadsUiState}", )
                     }
             )
 
@@ -99,6 +121,27 @@ fun PizzaDetailsContent(
                     },
                 selectedPizzaSize = state.selectedPizza,
                 onSelected = onChangedPizzaSize
+            )
+
+            Text(
+                text = "CUSTOMIZE YOUR PIZZA",
+                fontSize = 16.sp,
+                color = Color.Gray,
+                modifier = Modifier
+                    .padding(top = 32.dp)
+                    .constrainAs(text) {
+                        top.linkTo(pizzaSizes.bottom)
+                        start.linkTo(parent.start)
+                    }
+            )
+            PizzaDetailsIngredientChips(
+                selectedIngredients = currentBreadUiState.selectedIngredients,
+                onSelected = onChangedIngredient,
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .constrainAs(ingredients) {
+                        top.linkTo(text.bottom)
+                    }
             )
         }
     }
