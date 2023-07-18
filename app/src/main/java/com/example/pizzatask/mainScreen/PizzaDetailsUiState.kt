@@ -15,10 +15,10 @@ data class BreadUiState(
     val selectedIngredients: List<Ingredient> = emptyList()
 )
 
-enum class PizzaSizes(val title: String, val size: Dp) {
-    Small("S", 165.dp),
-    Medium("M", 190.dp),
-    Large("L", 230.dp)
+enum class PizzaSizes(val title: String, val size: Int) {
+    Small("S", 165),
+    Medium("M", 190),
+    Large("L", 230)
 }
 
 enum class Ingredient(val defaultImage: Int) {
