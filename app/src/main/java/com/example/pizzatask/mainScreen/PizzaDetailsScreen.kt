@@ -68,7 +68,7 @@ fun PizzaDetailsContent(
                 )
             )
         ) {
-            val (plate, breadPager, price, pizzaSizes, text , ingredients) = createRefs()
+            val (plate, breadPager, price, pizzaSizes, text, ingredients) = createRefs()
 
             Box(
                 modifier = Modifier
@@ -108,20 +108,27 @@ fun PizzaDetailsContent(
                         top.linkTo(plate.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    }.clickable{
-                        Log.e("TAG", "onChangeIngredientChip: ${state.breadsUiState}", )
+                    }
+                    .clickable {
+                        Log.e("TAG", "onChangeIngredientChip: ${state.breadsUiState}")
                     }
             )
 
-            PizzaDetailsPizzaSizesChips(
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(top = 16.dp)
                     .constrainAs(pizzaSizes) {
                         top.linkTo(price.bottom)
                     },
-                selectedPizzaSize = state.selectedPizza,
-                onSelected = onChangedPizzaSize
-            )
+            ) {
+                PizzaDetailsPizzaSizesChips(
+                    modifier = Modifier,
+                    selectedPizzaSize = state.selectedPizza,
+                    onSelected = onChangedPizzaSize
+                )
+            }
 
             Text(
                 text = "CUSTOMIZE YOUR PIZZA",

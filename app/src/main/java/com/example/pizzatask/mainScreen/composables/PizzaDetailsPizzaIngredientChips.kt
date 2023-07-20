@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.pizzatask.mainScreen.BreadUiState
 import com.example.pizzatask.mainScreen.Ingredient
+import com.example.pizzatask.ui.theme.SelectedChip
 
 @Composable
 fun PizzaDetailsIngredientChips(
@@ -47,7 +48,7 @@ fun IngredientChip(
 ) {
     val isSelected = selectedIngredients.contains(ingredient)
     Surface(
-        color = if (isSelected) Color.Green else Color.White,
+        color = if (isSelected) SelectedChip else Color.White,
         shape = CircleShape,
         modifier = Modifier
             .size(45.dp)
